@@ -3,6 +3,7 @@ require 'faraday'
 require 'faraday_middleware'
 require 'json'
 require 'httparty'
+require 'pry'
 
 # Net::HTTP.get(URI.parse('http://lacedeamon.spartaglobal.com/todos'))
 
@@ -32,9 +33,11 @@ describe "To-Dos API" do
   end
 
   it "should allow us to delete a post" do
-    res = HTTParty.delete("http://lacedeamon.spartaglobal.com/todos",
-    query: { "id" => 12568, "title" => "Karan and Katie", "due" => "2017-07-01" } )
-    expect(res.code).to eq(201)
+
+    newTodo = HTTParty.post("http://lacedeamon.spartaglobal.com/todos",
+    query: { "title" => "Karan and Katie", "due" => "1991-12-28"} )
+    res = HTTParty.delete("http://lacedeamon.spartaglobal.com/todos/#{newTodo['id']}")
+    expect(res.code).to eq(204)
   end
 
   it "should not accept dates outside a certain range" do
